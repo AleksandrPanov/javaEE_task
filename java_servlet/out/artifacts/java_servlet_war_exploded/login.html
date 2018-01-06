@@ -3,32 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Login form</title>
-
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script>
-        function CallServlet()
-        {
-            alert("I work!");
-            /*var data = "hello!";
-            $.post('ServletPrintBrowserDate',{data: data});
-             $.post('ServletPrintBrowserDate', function(data) {
-               alert(data);
-            });*/
-        }
-    </script>
 </head>
 
 <body>
 
-    <form name="loginForm" method="GET" action="login">
+    <form name="loginForm1" method="GET" action="login">
        username : <input type="text" name="login"> </br>
        password : <input type="password" name="password"> </br>
        <input type="submit" value="Login by get">
     </form>
     </br>
+    <form name="loginForm2" method="POST" action="login">
+        username : <input type="text" name="login"> </br>
+        password : <input type="password" name="password"> </br>
+        <input type="submit" value="Login by post">
+    </form>
+    </br>
+
 
     <form name="BrowserDate" method="POST" action="ServletPrintBrowserDate">
-        <p> <input type="hidden" value="text" name="browserInfo"> </p>
         <p><input type="submit" value="Send date, browser name"></p>
     </form>
 </body>

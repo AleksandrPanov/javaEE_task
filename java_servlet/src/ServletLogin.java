@@ -8,25 +8,21 @@ import java.io.PrintWriter;
 
 @WebServlet("/login")
 public class ServletLogin extends HttpServlet {
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
-
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String login = req.getParameter("login");
-        String password = req.getParameter("password");
-        PrintWriter pw = resp.getWriter();
+    private void send(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+        String login = request.getParameter("login");
+        String password = request.getParameter("password");
+        PrintWriter pw = response.getWriter();
         StringBuilder builder = new StringBuilder();
-
 
         builder.append("<html>");
         if (login.length() == 0 || password.length() == 0 )
         {
             builder.append("<p>login and password must be not null</p");
         }
-        else if (password.length() < 4)
+        else if (!Validation.passwordIsValid(password))
         {
-            builder.append("<p>password must have 4 or more symbols</p");
+            builder.append("<p>correct password is 'root'</p");
         }
         else
         {
@@ -37,5 +33,12 @@ public class ServletLogin extends HttpServlet {
         builder.append("</html>");
 
         pw.write(builder.toString());
+    }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        send(request, response);
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        send(request, response);
     }
 }

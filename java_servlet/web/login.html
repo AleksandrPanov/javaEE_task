@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Login form</title>
@@ -9,9 +9,9 @@
         function CallServlet()
         {
             alert("I work!");
-            var data = "hello!";
+            /*var data = "hello!";
             $.post('ServletPrintBrowserDate',{data: data});
-           /* $.post('ServletPrintBrowserDate', function(data) {
+             $.post('ServletPrintBrowserDate', function(data) {
                alert(data);
             });*/
         }
@@ -23,13 +23,13 @@
     <form name="loginForm" method="GET" action="hello">
        username : <input type="text" name="login"> </br>
        password : <input type="password" name="password"> </br>
-       <input type="submit" value="Login">
+       <input type="submit" value="Login by get">
     </form>
     </br>
 
     <form name="BrowserDate" method="POST" action="ServletPrintBrowserDate">
         <p> <input type="hidden" value="text" name="browserInfo"> </p>
-        <p><input type="submit" value="Отправить"></p>
+        <p><input type="submit" value="Send date, browser name"></p>
     </form>
 </body>
 

@@ -2,12 +2,10 @@ package server;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 @WebServlet("/Login")
 public class Login extends HttpServlet {
@@ -24,22 +22,44 @@ public class Login extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String login = req.getParameter("login");
         String password = req.getParameter("password");
+        String useCache = req.getParameter("cache");
         StringBuilder builder = new StringBuilder();
 
         builder.append("<html>");
-        if (login.length() == 0 && password.length() == 0 && session != null)
+        if (login.length() == 0 && password.length() == 0)
         {
-            login = (String) session.getAttribute("login");
-            password = (String) session.getAttribute("password");
-            redirectToWelcomePage(builder, login, password);
+            if (session != null && useCache.equals("session")) {
+                login = (String) session.getAttribute("login");
+                password = (String) session.getAttribute("password");
+                redirectToWelcomePage(builder, login, password);
+            }
+            else if (useCache.equals("cookies"))
+            {
+                Cookie[] cookies = req.getCookies();
+                if (cookies != null)
+                {
+                    builder.append("<p>num of cookies "+cookies.length+"</p>");
+                    for (Cookie cookie : cookies)
+                    {
+                        if (cookie.getName().equals("login"))
+                        {
+                            String s[] = cookie.getValue().split("_");
+                            login = s[0];
+                            password = s[1];
+                            redirectToWelcomePage(builder, login, password);
+                        }
+                    }
+                }
+                else
+                    builder.append("<p>num of cookies 0</p>");
+            }
         }
-        else if (!Validation.loginIsValid(login))
+        else if (!Validation.loginIsValid(login) || !Validation.passwordIsValid(password))
         {
-            builder.append("<p>login must be not null</p");
-        }
-        else if (!Validation.passwordIsValid(password))
-        {
-            builder.append("<p>password must have 4 or more symbols</p");
+            if (login.length() == 0 || password.length() == 0)
+            builder.append("<p>login and password must be not null</p");
+            else
+            builder.append("<p>password must have 4 or more symbols, login and password cannot contained '_' or ' '</p");
         }
         else
         {
@@ -52,6 +72,9 @@ public class Login extends HttpServlet {
                     session = req.getSession();
                     session.setAttribute("login", login);
                     session.setAttribute("password", password);
+                    String s = login + "_" + password;
+                    Cookie cookie = new Cookie("login", s);
+                    resp.addCookie(cookie);
                     redirectToWelcomePage(builder, login, password);
                 }
                 else if (users.isContained(login))

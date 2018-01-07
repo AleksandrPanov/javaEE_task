@@ -22,11 +22,11 @@ public class Create extends HttpServlet {
         builder.append("<html>");
         if (!Validation.loginIsValid(login))
         {
-            builder.append("<p>login must be not null</p");
+            builder.append("<p>login must be not null and login cannot contained '_' or ' '</p\"</p");
         }
         else if (!Validation.passwordIsValid(password))
         {
-            builder.append("<p>password must have 4 or more symbols</p");
+            builder.append("<p>password must have 4 or more symbols and password cannot contained '_' or ' '</p");
         }
         else
         {

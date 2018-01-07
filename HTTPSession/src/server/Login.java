@@ -26,12 +26,18 @@ public class Login extends HttpServlet {
         StringBuilder builder = new StringBuilder();
 
         builder.append("<html>");
-        if (login.length() == 0 && password.length() == 0)
+        if (login.length() == 0 && password.length() == 0 && !useCache.equals("nothing"))
         {
-            if (session != null && useCache.equals("session")) {
-                login = (String) session.getAttribute("login");
-                password = (String) session.getAttribute("password");
-                redirectToWelcomePage(builder, login, password);
+            if (useCache.equals("session"))
+            {
+                if (session != null )
+                {
+                    login = (String) session.getAttribute("login");
+                    password = (String) session.getAttribute("password");
+                    redirectToWelcomePage(builder, login, password);
+                }
+                else
+                    builder.append("session is empty");
             }
             else if (useCache.equals("cookies"))
             {
